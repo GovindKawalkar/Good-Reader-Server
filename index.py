@@ -76,7 +76,6 @@ if st.button("Login", use_container_width=True):
     else:
         st.error("Invalid credentials")
 
-st.markdown("""
 st.markdown("**Already have an account?**")
 if st.button("Sign up", key="signup_link"):
     st.switch_page("pages/signup.py")
