@@ -2,78 +2,75 @@ import streamlit as st
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="GoodReader - Login",
+    page_title="GoodReader Login",
     layout="wide",
 )
 
 # ---------------- OWNER SETTINGS ----------------
 BACKGROUND_IMAGE_URL = "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"
-LOGO_PATH = None  # Example: "logo.png" (upload file & set path)
+LOGO_PATH = None  # Example: "logo.png"
 
 ADMIN_USERNAME = "Admin"
 ADMIN_PASSWORD = "admin123"
 
-# ---------------- CSS STYLING ----------------
+# ---------------- CSS ----------------
 st.markdown(
     f"""
     <style>
     .stApp {{
-        background: linear-gradient(
-            rgba(0,0,0,0.4),
-            rgba(0,0,0,0.4)
-        ),
-        url("{BACKGROUND_IMAGE_URL}");
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                    url("{BACKGROUND_IMAGE_URL}");
         background-size: cover;
         background-position: center;
     }}
 
     .login-box {{
         background-color: white;
-        width: 330px;
-        padding: 25px;
-        border-radius: 14px;
-        box-shadow: 0px 8px 25px rgba(0,0,0,0.3);
+        width: 260px;
+        height: 300px;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.35);
         position: fixed;
-        top: 20px;
-        right: 20px;
+        top: 18px;
+        right: 18px;
     }}
 
-    .app-title {{
+    .title {{
         text-align: center;
-        font-size: 28px;
+        font-size: 22px;
         font-weight: bold;
         background: linear-gradient(90deg,
-            #ff0000,
-            #ff7f00,
-            #ffff00,
-            #00ff00,
-            #00ffff,
-            #0000ff,
-            #8b00ff
+            #ff3c3c,
+            #ffb347,
+            #ffee58,
+            #4caf50,
+            #00bcd4,
+            #3f51b5,
+            #9c27b0
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 15px;
+        margin-bottom: 8px;
     }}
 
-    .footer-text {{
+    .footer {{
         text-align: center;
-        font-size: 12px;
-        margin-top: 15px;
-        color: gray;
+        font-size: 11px;
+        color: #777;
+        margin-top: 6px;
     }}
 
-    .link-text {{
+    .links {{
         text-align: center;
-        font-size: 13px;
+        font-size: 11px;
     }}
 
-    .link-text a {{
-        text-decoration: none;
+    .links a {{
         color: #1f77b4;
-        margin: 0 6px;
+        text-decoration: none;
+        margin: 0 3px;
     }}
-
     </style>
     """,
     unsafe_allow_html=True
@@ -84,44 +81,44 @@ st.markdown('<div class="login-box">', unsafe_allow_html=True)
 
 # Logo
 if LOGO_PATH:
-    st.image(LOGO_PATH, width=80)
+    st.image(LOGO_PATH, width=60)
 else:
-    st.markdown("<p style='text-align:center;font-size:40px;'>📚</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;font-size:32px;'>📖</p>", unsafe_allow_html=True)
 
-# App Name
-st.markdown('<div class="app-title">Good Reader</div>', unsafe_allow_html=True)
+# App Title
+st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
 
-# Login Inputs
-username = st.text_input("Username")
-password = st.text_input("Password", type="password")
+# Inputs
+username = st.text_input("Username", key="username")
+password = st.text_input("Password", type="password", key="password")
 
-# Login Button
+# Button
 if st.button("Login", use_container_width=True):
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        st.success("Login Successful ✅")
+        st.success("Login Successful")
         st.session_state["logged_in"] = True
-        st.session_state["user"] = "Admin"
         st.rerun()
     else:
-        st.error("Invalid Username or Password ❌")
+        st.error("Invalid credentials")
 
 # Links
 st.markdown(
     """
-    <div class="link-text">
-        <a href="#">Sign Up</a> |
-        <a href="#">Forgot Password</a> |
-        <a href="#">New Account</a>
+    <div class="links">
+        <a href="#">Sign up</a> |
+        <a href="#">Forgot</a> |
+        <a href="#">New</a>
     </div>
     """,
     unsafe_allow_html=True
 )
 
 # Footer
-st.markdown('<div class="footer-text">Created by Govind</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Created by Govind</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------------- AFTER LOGIN ----------------
+# ---------------- REDIRECT ----------------
 if st.session_state.get("logged_in"):
     st.switch_page("pages/dashboard.py")
+
