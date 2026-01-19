@@ -77,8 +77,9 @@ if st.button("Login", use_container_width=True):
         st.error("Invalid credentials")
 
 st.markdown("""
-<div class="links">
-    <a href="pages/signup.py">Sign up</a> |
+st.markdown("**Already have an account?**")
+if st.button("Sign up", key="signup_link"):
+    st.switch_page("pages/signup.py")
     <a href="#">Forgot</a> |
     <a href="#">New</a>
 </div>
