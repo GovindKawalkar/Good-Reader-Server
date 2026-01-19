@@ -81,7 +81,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     if st.button("Sign up"):
-        st.switch_page("pages/signup.py")
+        st.switch_page("signup.py")
 
 with col2:
     st.button("Forgot")
