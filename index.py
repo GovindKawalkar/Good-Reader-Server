@@ -2,92 +2,104 @@ import streamlit as st
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="GoodReader | Login",
-    layout="wide",
+    page_title="GoodReader | Create Account",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# ---------------- SETTINGS ----------------
-BACKGROUND_IMAGE = "https://images.unsplash.com/photo-1512820790803-83ca734da794"
-
-ADMIN_USERNAME = "Admin"
-ADMIN_PASSWORD = "admin123"
-
 # ---------------- CSS ----------------
-st.markdown(f"""
+st.markdown("""
 <style>
-.stApp {{
-    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-                url("{BACKGROUND_IMAGE}");
-    background-size: cover;
-    background-position: center;
-}}
+.stApp {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
 
-.login-box {{
-    width: 240px;
-    height: 260px;
+.signup-box {
     background: white;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
-}}
+    max-width: 420px;
+    margin: auto;
+    margin-top: 60px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
 
-.logo {{
+.logo {
     text-align: center;
-    font-size: 30px;
-}}
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
 
-.title {{
+.subtitle {
     text-align: center;
     font-size: 20px;
-    font-weight: bold;
-    background: linear-gradient(90deg,
-        red, orange, yellow, green, cyan, blue, violet);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 6px;
-}}
+    margin-bottom: 20px;
+}
 
-.footer {{
-    text-align: center;
-    font-size: 10px;
+.small-text {
+    font-size: 12px;
     color: gray;
-    margin-top: 4px;
-}}
+}
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    color: white;
+    margin-top: 25px;
+}
+
+.footer a {
+    color: #ddd;
+    text-decoration: none;
+    margin: 0 6px;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- LOGIN BOX ----------------
-st.markdown('<div class="login-box">', unsafe_allow_html=True)
+# ---------------- SIGN UP BOX ----------------
+st.markdown('<div class="signup-box">', unsafe_allow_html=True)
 
-st.markdown('<div class="logo">📘</div>', unsafe_allow_html=True)
-st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
+st.markdown('<div class="logo">GoodReader</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Create Account</div>', unsafe_allow_html=True)
 
-username = st.text_input("Username", placeholder="Username", label_visibility="collapsed")
-password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
+name = st.text_input("Your name", placeholder="First and last name")
+email = st.text_input("Email")
+password = st.text_input("Password", type="password", placeholder="At least 6 characters")
+st.markdown('<div class="small-text">Passwords must be at least 6 characters.</div>', unsafe_allow_html=True)
+confirm_password = st.text_input("Re-enter password", type="password")
 
-if st.button("Login", use_container_width=True):
-    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        st.session_state["logged_in"] = True
-        st.switch_page("pages/dashboard.py")
+if st.button("Create account", use_container_width=True):
+    if not name or not email or not password or not confirm_password:
+        st.error("All fields are required")
+    elif len(password) < 6:
+        st.error("Password must be at least 6 characters")
+    elif password != confirm_password:
+        st.error("Passwords do not match")
     else:
-        st.error("Invalid Username or Password")
+        st.success("Account created successfully 🎉")
+        st.switch_page("index.py")
 
-# ---------------- NAV BUTTONS ----------------
-col1, col2, col3 = st.columns(3)
+st.markdown("""
+<p class="small-text">
+By creating an account, you agree to the GoodReader
+<b>Terms of Service</b> and <b>Privacy Policy</b>
+</p>
 
-with col1:
-    if st.button("Sign up"):
-        st.switch_page("signup.py")
+<p class="small-text">
+Already have an account?
+<a href="#" onclick="window.location.href='/'">Sign in</a>
+</p>
+""", unsafe_allow_html=True)
 
-with col2:
-    st.button("Forgot")
-
-with col3:
-    st.button("New")
-
-st.markdown('<div class="footer">Created by Govind</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
+
+# ---------------- FOOTER ----------------
+st.markdown("""
+<div class="footer">
+    <a href="#">Terms of Service</a>
+    <a href="#">Privacy</a>
+    <a href="#">Help</a><br>
+    © 2026 Goodreads LLC
+</div>
+""", unsafe_allow_html=True)
