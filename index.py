@@ -76,14 +76,19 @@ if st.button("Login", use_container_width=True):
     else:
         st.error("Invalid credentials")
 
-st.markdown(
-st.markdown("**Already have an account?**")
-if st.button("Sign up", key="signup_link"):
-    st.switch_page("pages/signup.py")
-    <a href="#">Forgot</a> |
-    <a href="#">New</a>
-</div>
-, unsafe_allow_html=True)
+# ---------------- LINKS (FIXED) ----------------
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("Sign up"):
+        st.switch_page("pages/signup.py")
+
+with col2:
+    st.button("Forgot")
+
+with col3:
+    st.button("New")
+
 
 st.markdown('<div class="footer">Created by Govind</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
