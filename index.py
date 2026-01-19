@@ -2,7 +2,7 @@ import streamlit as st
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="GoodReader Login",
+    page_title="GoodReader | Login",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -17,15 +17,27 @@ ADMIN_PASSWORD = "admin123"
 st.markdown(f"""
 <style>
 .stApp {{
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
                 url("{BACKGROUND_IMAGE}");
     background-size: cover;
     background-position: center;
 }}
 
+.login-box {{
+    width: 240px;
+    height: 260px;
+    background: white;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}}
+
 .logo {{
     text-align: center;
-    font-size: 28px;
+    font-size: 30px;
 }}
 
 .title {{
@@ -36,7 +48,7 @@ st.markdown(f"""
         red, orange, yellow, green, cyan, blue, violet);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }}
 
 .footer {{
@@ -44,17 +56,6 @@ st.markdown(f"""
     font-size: 10px;
     color: gray;
     margin-top: 4px;
-}}
-
-.links {{
-    text-align: center;
-    font-size: 10px;
-}}
-
-.links a {{
-    text-decoration: none;
-    color: #1f77b4;
-    margin: 0 2px;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -65,18 +66,17 @@ st.markdown('<div class="login-box">', unsafe_allow_html=True)
 st.markdown('<div class="logo">📘</div>', unsafe_allow_html=True)
 st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
 
-username = st.text_input("Username", label_visibility="collapsed", placeholder="Username")
-password = st.text_input("Password", type="password", label_visibility="collapsed", placeholder="Password")
+username = st.text_input("Username", placeholder="Username", label_visibility="collapsed")
+password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
 
 if st.button("Login", use_container_width=True):
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        st.session_state.logged_in = True
-        st.success("Login successful")
-        st.rerun()
+        st.session_state["logged_in"] = True
+        st.switch_page("pages/dashboard.py")
     else:
-        st.error("Invalid credentials")
+        st.error("Invalid Username or Password")
 
-# ---------------- LINKS (FIXED) ----------------
+# ---------------- NAV BUTTONS ----------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -89,10 +89,5 @@ with col2:
 with col3:
     st.button("New")
 
-
 st.markdown('<div class="footer">Created by Govind</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
-# ---------------- REDIRECT ----------------
-if st.session_state.get("logged_in"):
-    st.switch_page("pages/dashboard.py")
