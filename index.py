@@ -55,7 +55,7 @@ st.markdown(f"""
     text-align: center;
     font-size: 10px;
     color: gray;
-    margin-top: 4px;
+    margin-top: 6px;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -71,23 +71,17 @@ password = st.text_input("Password", type="password", placeholder="Password", la
 
 if st.button("Login", use_container_width=True):
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        st.session_state["logged_in"] = True
-        st.switch_page("pages/dashboard.py")
+        st.success("Login successful")
+        st.page_link("pages/dashboard.py", label="Go to Dashboard", icon="➡️")
     else:
         st.error("Invalid Username or Password")
 
-# ---------------- NAV BUTTONS ----------------
-col1, col2, col3 = st.columns(3)
+st.divider()
 
-with col1:
-    if st.button("Sign up"):
-        st.switch_page("pages/signup.py")
-
-with col2:
-    st.button("Forgot")
-
-with col3:
-    st.button("New")
+# ---------------- SAFE NAVIGATION (NO ERRORS) ----------------
+st.page_link("pages/signup.py", label="Sign up", icon="📝")
+st.page_link("pages/signup.py", label="New Account", icon="➕")
+st.page_link("pages/signup.py", label="Forgot Password", icon="🔐")
 
 st.markdown('<div class="footer">Created by Govind</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
