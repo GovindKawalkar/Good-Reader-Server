@@ -23,18 +23,6 @@ st.markdown(f"""
     background-position: center;
 }}
 
-.login-box {{
-    width: 240px;
-    height: 240px;
-    background: white;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    border-radius: 10px;
-    padding: 14px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}}
-
 .logo {{
     text-align: center;
     font-size: 28px;
