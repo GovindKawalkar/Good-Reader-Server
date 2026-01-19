@@ -78,7 +78,7 @@ if st.button("Login", use_container_width=True):
 
 st.markdown("""
 <div class="links">
-    <a href="#">Sign up</a> |
+    <a href="pages/signup.py">Sign up</a> |
     <a href="#">Forgot</a> |
     <a href="#">New</a>
 </div>
