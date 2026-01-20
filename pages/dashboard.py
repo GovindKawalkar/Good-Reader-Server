@@ -7,7 +7,6 @@ st.set_page_config(
 )
 
 # ---------------- CUSTOM CSS ----------------
-st.markdown("""
 <style>
 body {
     background-color: #f4f1ea;
@@ -53,7 +52,7 @@ body {
     margin-bottom: 15px;
 }
 </style>
-""", unsafe_allow_html=True)
+, unsafe_allow_html=True
 
 # ---------------- TOP NAVBAR ----------------
 st.markdown("""
