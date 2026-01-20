@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -19,6 +20,10 @@ BACKGROUND_IMAGE = "https://images.unsplash.com/photo-1512820790803-83ca734da794
 
 st.markdown(f"""
 <style>
+html, body, .stApp {{
+    height: 100%;
+}}
+
 .stApp {{
     background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
                 url("{BACKGROUND_IMAGE}");
@@ -28,7 +33,6 @@ st.markdown(f"""
 
 .login-box {{
     width: 240px;
-    height: 270px;
     background: white;
     position: fixed;
     top: 20px;
@@ -47,14 +51,6 @@ st.markdown(f"""
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }}
-
-.link-btn button {{
-    background: none;
-    border: none;
-    color: #4a6ee0;
-    cursor: pointer;
-    font-size: 12px;
-}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -69,40 +65,29 @@ if st.session_state.page == "login":
     password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
 
     if st.button("Login", use_container_width=True):
-    if username == "Admin" and password == "admin123":
-        with st.spinner("Loading dashboard..."):
-            st.session_state.logged_in = True
-            st.session_state.page = "dashboard"
-            st.experimental_set_query_params(page="dashboard")
-            st.rerun()
-    else:
-        st.error("Invalid credentials")
-
+        if username == "Admin" and password == "admin123":
+            with st.spinner("Loading dashboard..."):
+                time.sleep(0.4)  # UX smoothness
+                st.session_state.logged_in = True
+                st.session_state.page = "dashboard"
+                st.rerun()
+        else:
+            st.error("Invalid credentials")
 
     st.divider()
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Sign up"):
-            st.session_state.page = "signup"
-            st.rerun()
-
+        st.button("Sign up")
     with col2:
-        if st.button("New Account"):
-            st.session_state.page = "signup"
-            st.rerun()
+        st.button("New Account")
 
     st.markdown(
         '<p style="text-align:center;font-size:10px;color:gray;">Created by Govind</p>',
         unsafe_allow_html=True
     )
-
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------------- DASHBOARD ----------------
+# ---------------- DASHBOARD ROUTE ----------------
 elif st.session_state.page == "dashboard":
-    import dashboard   # dashboard.py must exist
-
-# ---------------- SIGNUP ----------------
-elif st.session_state.page == "signup":
-    import signup      # signup.py must exist
+    import dashboard
