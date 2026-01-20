@@ -69,12 +69,15 @@ if st.session_state.page == "login":
     password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
 
     if st.button("Login", use_container_width=True):
-        if username == "Admin" and password == "admin123":
+    if username == "Admin" and password == "admin123":
+        with st.spinner("Loading dashboard..."):
             st.session_state.logged_in = True
             st.session_state.page = "dashboard"
+            st.experimental_set_query_params(page="dashboard")
             st.rerun()
-        else:
-            st.error("Invalid credentials")
+    else:
+        st.error("Invalid credentials")
+
 
     st.divider()
 
