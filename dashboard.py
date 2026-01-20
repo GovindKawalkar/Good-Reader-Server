@@ -1,9 +1,9 @@
 import streamlit as st
 
+# ---------- PROTECT PAGE ----------
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
     st.warning("Please login first")
     st.stop()
-
 
 # ---------- FORCE WHITE BACKGROUND ----------
 st.markdown("""
@@ -13,7 +13,6 @@ html, body, .stApp, .main, .block-container {
     color: #000000 !important;
 }
 
-/* Remove top padding */
 .block-container {
     padding-top: 0rem !important;
 }
@@ -59,11 +58,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.write("")  # spacing
+st.write("")
 
-# ---------- CONTENT ----------
-st.header("📚 Popular Books")
-
+# ---------- CACHE DATA FOR SPEED ----------
 @st.cache_data(show_spinner=False)
 def load_books():
     return [
@@ -73,13 +70,21 @@ def load_books():
         ("Ikigai", "https://m.media-amazon.com/images/I/71tbalAHYCL.jpg"),
         ("Rich Dad Poor Dad", "https://m.media-amazon.com/images/I/81bsw6fnUiL.jpg"),
     ]
+
 books = load_books()
 
-with st.spinner("Preparing your reading space..."):
-    st.sleep(0.5)
+# ---------- CONTENT ----------
+st.header("📚 Popular Books")
 
-
+cols = st.columns(5)
 for i, book in enumerate(books):
     with cols[i]:
         st.image(book[1], use_container_width=True)
         st.markdown(f"**{book[0]}**")
+
+# ---------- LOGOUT ----------
+st.write("")
+if st.button("Logout"):
+    st.session_state.logged_in = False
+    st.session_state.page = "login"
+    st.rerun()
