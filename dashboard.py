@@ -1,90 +1,123 @@
 import streamlit as st
+from datetime import date, timedelta
 
-# ---------- PROTECT PAGE ----------
-if "logged_in" not in st.session_state or not st.session_state.logged_in:
+st.set_page_config(page_title="Dashboard", layout="wide")
+
+# ---- SESSION CHECK ----
+if "logged_in" not in st.session_state:
     st.warning("Please login first")
     st.stop()
 
-# ---------- FORCE WHITE BACKGROUND ----------
+# ---- CSS ----
 st.markdown("""
 <style>
-html, body, .stApp, .main, .block-container {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+body {
+    background-color: white;
 }
-
-.block-container {
-    padding-top: 0rem !important;
-}
-
-/* Top bar */
 .topbar {
-    background-color: #ffffff;
+    background: #ffffff;
+    padding: 10px;
     border-bottom: 1px solid #ddd;
-    padding: 14px 40px;
-    display: flex;
-    align-items: center;
 }
-
-.site-name {
-    font-size: 26px;
-    font-weight: 800;
-    color: #382110;
-    margin-left: 10px;
-}
-
-.menu {
-    margin-left: auto;
-}
-
-.menu span {
-    margin-left: 24px;
-    font-weight: 500;
-    cursor: pointer;
+.card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- TOP BAR ----------
-st.markdown("""
-<div class="topbar">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Book_icon_2.svg" height="32">
-    <div class="site-name">GoodReader</div>
-    <div class="menu">
-        <span>Blog</span>
-        <span>Free Books</span>
-        <span>Premium Books</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# ---- TOP BAR ----
+st.markdown("<div class='topbar'>", unsafe_allow_html=True)
+c1, c2, c3 = st.columns(3)
+with c1:
+    news_btn = st.button("📰 News & Articles")
+with c2:
+    blog_btn = st.button("✍️ Blogs")
+with c3:
+    book_btn = st.button("📚 Books")
+st.markdown("</div>", unsafe_allow_html=True)
 
-st.write("")
+# ---- DATE FILTER ----
+today = date.today()
+yesterday = today - timedelta(days=1)
+date_filter = st.radio("Select Date", ["Today", "Yesterday"])
 
-# ---------- CACHE DATA FOR SPEED ----------
-@st.cache_data(show_spinner=False)
-def load_books():
-    return [
-        ("Atomic Habits", "https://m.media-amazon.com/images/I/91bYsX41DVL.jpg"),
-        ("The Alchemist", "https://m.media-amazon.com/images/I/71aFt4+OTOL.jpg"),
-        ("Deep Work", "https://m.media-amazon.com/images/I/71g2ednj0JL.jpg"),
-        ("Ikigai", "https://m.media-amazon.com/images/I/71tbalAHYCL.jpg"),
-        ("Rich Dad Poor Dad", "https://m.media-amazon.com/images/I/81bsw6fnUiL.jpg"),
+selected_date = today if date_filter == "Today" else yesterday
+
+# ================= NEWS & ARTICLES =================
+if news_btn:
+    st.header("📰 Newspaper & Articles")
+    st.write(f"Showing for: **{selected_date}**")
+
+    categories = {
+        "Sports": "India won the series by 3-1.",
+        "Education": "New education policy updates announced.",
+        "Politics": "Parliament session highlights.",
+        "Business": "Market shows strong growth today."
+    }
+
+    for k, v in categories.items():
+        st.markdown(f"""
+        <div class="card">
+        <h4>{k}</h4>
+        <p>{v}</p>
+        <small>Date: {selected_date}</small>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ================= BLOG SECTION =================
+if blog_btn:
+    st.header("✍️ Blogs")
+
+    blogs = [
+        ("Future of AI", "AI will transform industries rapidly."),
+        ("Education Growth", "Online education is booming."),
+        ("Business Tips", "Smart investment strategies.")
     ]
 
-books = load_books()
+    for title, desc in blogs:
+        st.markdown(f"""
+        <div class="card">
+        <h4>{title}</h4>
+        <p>{desc}</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-# ---------- CONTENT ----------
-st.header("📚 Popular Books")
+    st.button("Show More Blogs")
 
-cols = st.columns(5)
-for i, book in enumerate(books):
-    with cols[i]:
-        st.image(book[1], use_container_width=True)
-        st.markdown(f"**{book[0]}**")
+# ================= BOOK SECTION =================
+if book_btn:
+    st.header("📚 Books")
 
-# ---------- LOGOUT ----------
-st.write("")
-if st.button("Logout"):
-    st.session_state.logged_in = False
-    st.session_state.page = "login"
-    st.rerun()
+    col1, col2 = st.columns(2)
+
+    # ---- FREE BOOKS ----
+    with col1:
+        st.subheader("📘 Free Books")
+        st.markdown("""
+        ⭐⭐⭐⭐☆ Python Basics  
+        Learn Python from scratch.
+        """)
+        st.markdown("""
+        ⭐⭐⭐☆☆ Data Science Intro  
+        Beginner friendly guide.
+        """)
+        st.button("More Free Books")
+
+    # ---- PREMIUM BOOKS ----
+    with col2:
+        st.subheader("💎 Premium Books")
+        st.markdown("""
+        ⭐⭐⭐⭐⭐ Advanced AI  
+        Complete AI mastery guide.
+        """)
+        st.markdown("""
+        ⭐⭐⭐⭐⭐ Business Strategy  
+        High-level business planning.
+        """)
+        st.button("More Premium Books")
+
+# ---- LOGOUT ----
+st.sidebar.button("Logout", on_click=lambda: st.session_state.clear())
