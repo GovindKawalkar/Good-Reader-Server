@@ -7,7 +7,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ---------------- SESSION ----------------
+# ---------------- SESSION STATE ----------------
+if "page" not in st.session_state:
+    st.session_state.page = "login"
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -25,7 +28,7 @@ st.markdown(f"""
 
 .login-box {{
     width: 240px;
-    height: 260px;
+    height: 270px;
     background: white;
     position: fixed;
     top: 20px;
@@ -44,30 +47,59 @@ st.markdown(f"""
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }}
+
+.link-btn button {{
+    background: none;
+    border: none;
+    color: #4a6ee0;
+    cursor: pointer;
+    font-size: 12px;
+}}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- LOGIN BOX ----------------
-st.markdown('<div class="login-box">', unsafe_allow_html=True)
-st.markdown('<div style="text-align:center;font-size:30px;">📘</div>', unsafe_allow_html=True)
-st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
+# ---------------- LOGIN PAGE ----------------
+if st.session_state.page == "login":
 
-username = st.text_input("Username", placeholder="Username", label_visibility="collapsed")
-password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center;font-size:30px;">📘</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
 
-if st.button("Login", use_container_width=True):
-    if username == "Admin" and password == "admin123":
-        st.session_state.logged_in = True
-        st.success("Login successful")
-        st.page_link("pages/dashboard.py", label="Go to Dashboard ➜")
-    else:
-        st.error("Invalid credentials")
+    username = st.text_input("Username", placeholder="Username", label_visibility="collapsed")
+    password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
 
-st.divider()
+    if st.button("Login", use_container_width=True):
+        if username == "Admin" and password == "admin123":
+            st.session_state.logged_in = True
+            st.session_state.page = "dashboard"
+            st.rerun()
+        else:
+            st.error("Invalid credentials")
 
-# ---------------- SAFE NAVIGATION ----------------
-st.page_link("pages/signup.py", label="Sign up", icon="📝")
-st.page_link("pages/signup.py", label="New Account", icon="➕")
+    st.divider()
 
-st.markdown('<p style="text-align:center;font-size:10px;color:gray;">Created by Govind</p>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Sign up"):
+            st.session_state.page = "signup"
+            st.rerun()
+
+    with col2:
+        if st.button("New Account"):
+            st.session_state.page = "signup"
+            st.rerun()
+
+    st.markdown(
+        '<p style="text-align:center;font-size:10px;color:gray;">Created by Govind</p>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ---------------- DASHBOARD ----------------
+elif st.session_state.page == "dashboard":
+    import dashboard   # dashboard.py must exist
+
+# ---------------- SIGNUP ----------------
+elif st.session_state.page == "signup":
+    import signup      # signup.py must exist
