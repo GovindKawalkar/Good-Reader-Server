@@ -2,39 +2,72 @@ import streamlit as st
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="GoodReader",
+    page_title="GoodReader | Login",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ---------------- SESSION DEFAULTS ----------------
+# ---------------- SESSION ----------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-if "current_page" not in st.session_state:
-    st.session_state.current_page = "login"
+# ---------------- BACKGROUND ----------------
+BACKGROUND_IMAGE = "https://images.unsplash.com/photo-1512820790803-83ca734da794"
 
-# ---------------- ROUTER ----------------
-def router():
-    if st.session_state.logged_in:
-        st.page_link("pages/dashboard.py", label="Go to Dashboard", icon="📊")
-    else:
-        st.page_link("index.py", label="Login", icon="🔐")
-        st.page_link("pages/signup.py", label="Sign up", icon="📝")
+st.markdown(f"""
+<style>
+.stApp {{
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                url("{BACKGROUND_IMAGE}");
+    background-size: cover;
+    background-position: center;
+}}
 
-# ---------------- HEADER ----------------
-st.markdown("""
-<h2 style='text-align:center;'>📚 GoodReader Library Recommendation Server</h2>
+.login-box {{
+    width: 240px;
+    height: 260px;
+    background: white;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}}
+
+.title {{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(90deg,
+        red, orange, yellow, green, cyan, blue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}}
+</style>
 """, unsafe_allow_html=True)
 
+# ---------------- LOGIN BOX ----------------
+st.markdown('<div class="login-box">', unsafe_allow_html=True)
+st.markdown('<div style="text-align:center;font-size:30px;">📘</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">Good Reader</div>', unsafe_allow_html=True)
+
+username = st.text_input("Username", placeholder="Username", label_visibility="collapsed")
+password = st.text_input("Password", type="password", placeholder="Password", label_visibility="collapsed")
+
+if st.button("Login", use_container_width=True):
+    if username == "Admin" and password == "admin123":
+        st.session_state.logged_in = True
+        st.success("Login successful")
+        st.page_link("pages/dashboard.py", label="Go to Dashboard ➜")
+    else:
+        st.error("Invalid credentials")
+
 st.divider()
 
-# ---------------- ROUTING MENU ----------------
-router()
+# ---------------- SAFE NAVIGATION ----------------
+st.page_link("pages/signup.py", label="Sign up", icon="📝")
+st.page_link("pages/signup.py", label="New Account", icon="➕")
 
-st.divider()
-
-# ---------------- INFO ----------------
-st.info(
-    "Use the navigation above to Login, Sign up, or access Dashboard after authentication."
-)
+st.markdown('<p style="text-align:center;font-size:10px;color:gray;">Created by Govind</p>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
