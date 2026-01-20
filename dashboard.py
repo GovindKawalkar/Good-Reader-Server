@@ -1,10 +1,9 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title="GoodReader | Dashboard",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+if "logged_in" not in st.session_state or not st.session_state.logged_in:
+    st.warning("Please login first")
+    st.stop()
+
 
 # ---------- FORCE WHITE BACKGROUND ----------
 st.markdown("""
@@ -65,14 +64,20 @@ st.write("")  # spacing
 # ---------- CONTENT ----------
 st.header("📚 Popular Books")
 
-cols = st.columns(5)
-books = [
-    ("Atomic Habits", "https://m.media-amazon.com/images/I/91bYsX41DVL.jpg"),
-    ("The Alchemist", "https://m.media-amazon.com/images/I/71aFt4+OTOL.jpg"),
-    ("Deep Work", "https://m.media-amazon.com/images/I/71g2ednj0JL.jpg"),
-    ("Ikigai", "https://m.media-amazon.com/images/I/71tbalAHYCL.jpg"),
-    ("Rich Dad Poor Dad", "https://m.media-amazon.com/images/I/81bsw6fnUiL.jpg"),
-]
+@st.cache_data(show_spinner=False)
+def load_books():
+    return [
+        ("Atomic Habits", "https://m.media-amazon.com/images/I/91bYsX41DVL.jpg"),
+        ("The Alchemist", "https://m.media-amazon.com/images/I/71aFt4+OTOL.jpg"),
+        ("Deep Work", "https://m.media-amazon.com/images/I/71g2ednj0JL.jpg"),
+        ("Ikigai", "https://m.media-amazon.com/images/I/71tbalAHYCL.jpg"),
+        ("Rich Dad Poor Dad", "https://m.media-amazon.com/images/I/81bsw6fnUiL.jpg"),
+    ]
+books = load_books()
+
+with st.spinner("Preparing your reading space..."):
+    st.sleep(0.5)
+
 
 for i, book in enumerate(books):
     with cols[i]:
